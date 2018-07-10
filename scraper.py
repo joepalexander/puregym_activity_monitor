@@ -60,7 +60,7 @@ def write_csv(num_people):
     d = datetime.utcnow()
     f = open(OUTPUT_FILE, 'a')
     w = csv.writer(f)
-    w.writerow([str(d) + 'Z', num_people])
+    w.writerow([d.isoformat() + 'Z', num_people])
 
 
 if __name__ == '__main__':
