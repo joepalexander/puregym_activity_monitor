@@ -12,8 +12,8 @@ from time import sleep
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
-QUERY_INTERVAL = 10 # minutes
-DATA_SUBDIRECTORY = 'recorded_data'
+QUERY_INTERVAL = os.getenv('puregym_query_interval') or 10 # minutes
+DATA_SUBDIRECTORY = os.getenv('puregym_data_directory') or 'recorded_data'
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, \
                            '{}.csv'.format(os.getenv('puregym_filename') \
                                            or 'puregym_activity_data'))
