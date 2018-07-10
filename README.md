@@ -21,7 +21,12 @@ The following steps will get you set up:
   `cd puregym_activity_monitor`  
 3. Install the python dependencies
   `pip install -r requirements.txt`
-5. Run the project 
+4. Copy the `.env.example` file and fill in your details
+  - `cp .env.example .env`
+  - Fill in your puregym email and pin
+  - You can change the output filename if you wish
+5. [Install ChromeDriver](http://chromedriver.chromium.org/getting-started)
+6. Run the project
   `python scraper.py`
 
 ## Optional: continuously run in the background
