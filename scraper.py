@@ -14,9 +14,10 @@ load_dotenv(dotenv_path=env_path)
 
 QUERY_INTERVAL = 10 # minutes
 DATA_SUBDIRECTORY = 'recorded_data'
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, '{}.csv'.format(os.getenv('puregym_location')))
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, \
+                           '{}.csv'.format(os.getenv('puregym_filename') \
+                                           or 'puregym_activity_data'))
 
-gym_url = 'https://www.puregym.com/members/'
 login_url = 'https://www.puregym.com/Login/?ReturnUrl=%2Fmembers%2F'
 login_payload = {
     'email': str(os.getenv('puregym_email')),
@@ -38,7 +39,9 @@ def fetch_activity():
     sleep(2)
 
     # Parse out number of people at the gym
-    span = driver.find_element_by_xpath('//*[@id="main-content"]/div[2]/div/div/div[2]/div/div/div/div[1]/div/p[1]/span')
+    span = driver.find_element_by_xpath("""
+//*[@id="main-content"]/div[2]/div/div/div[2]/div/div/div/div[1]/div/p[1]/span
+    """)
     num_people = re.search(r'\d+', span.text).group()
 
     driver.stop_client()
@@ -67,6 +70,7 @@ def write_csv(num_people):
 if __name__ == '__main__':
     print('PureGym web scraper...')
     init_csv()
+
     while True:
         num_people = fetch_activity()
         write_csv(num_people)
