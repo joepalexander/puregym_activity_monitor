@@ -24,7 +24,6 @@ login_payload = {
 }
 
 options = webdriver.ChromeOptions()
-options.binary_location = '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary'
 options.add_argument('window-size=800x841')
 options.add_argument('headless')
 
@@ -56,14 +55,13 @@ def init_csv():
         w = csv.writer(f)
         d = datetime.utcnow()
 
-        w.writerow(['Date', 'Day', 'Time', 'Number of people'])
+        w.writerow(['Timestamp', 'Number of people'])
 
 def write_csv(num_people):
     d = datetime.now()
     f = open(OUTPUT_FILE, 'a')
     w = csv.writer(f)
-    w.writerow([d.date(), d.strftime('%A'),\
-                d.strftime('%H:%M'), num_people])
+    w.writerow([str(d) + 'Z', num_people])
 
 
 if __name__ == '__main__':
