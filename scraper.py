@@ -60,6 +60,9 @@ def init_csv():
         if not os.path.exists(DATA_SUBDIRECTORY):
             os.makedirs(DATA_SUBDIRECTORY)
 
+        f = open(OUTPUT_FILE, 'a')
+        w = csv.writer(f)
+
         w.writerow(['Timestamp', 'Number of people'])
 
 def write_csv(num_people):
