@@ -12,11 +12,17 @@ from time import sleep
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
-QUERY_INTERVAL = os.getenv('puregym_query_interval') or 10 # minutes
+QUERY_INTERVAL = int(os.getenv('puregym_query_interval')) or 10 # minutes
 DATA_SUBDIRECTORY = os.getenv('puregym_data_directory') or 'recorded_data'
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, \
                            '{}.csv'.format(os.getenv('puregym_filename') \
                                            or 'puregym_activity_data'))
+
+if not os.getenv('puregym_email') or not os.getenv('puregym_pin'):
+    raise ValueError("""
+    ERROR:
+    Puregym email and pin not found. Have you set them in your .env file?
+    """)
 
 login_url = 'https://www.puregym.com/Login/?ReturnUrl=%2Fmembers%2F'
 login_payload = {
