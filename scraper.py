@@ -3,6 +3,8 @@
 import requests
 import os
 import re
+import csv
+from datetime import datetime
 from selenium import webdriver
 from dotenv import load_dotenv
 from pathlib import Path
@@ -11,12 +13,14 @@ env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 
 QUERY_INTERVAL = 10 # minutes
+DATA_SUBDIRECTORY = 'recorded_data'
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, '{}.csv'.format(os.getenv('puregym_location')))
 
 gym_url = 'https://www.puregym.com/members/'
 login_url = 'https://www.puregym.com/Login/?ReturnUrl=%2Fmembers%2F'
 login_payload = {
-    "email": str(os.getenv("puregym_email")),
-    "pin": str(os.getenv("puregym_pin")),
+    'email': str(os.getenv('puregym_email')),
+    'pin': str(os.getenv('puregym_pin')),
 }
 
 options = webdriver.ChromeOptions()
@@ -43,13 +47,31 @@ def fetch_activity():
 
     return num_people
 
+def init_csv():
+    if not os.path.isfile(OUTPUT_FILE):
+        if not os.path.exists(DATA_SUBDIRECTORY):
+            os.makedirs(DATA_SUBDIRECTORY)
+
+        f = open(OUTPUT_FILE, 'a')
+        w = csv.writer(f)
+        d = datetime.utcnow()
+
+        w.writerow(['Date', 'Day', 'Time', 'Number of people'])
+
+def write_csv(num_people):
+    d = datetime.now()
+    f = open(OUTPUT_FILE, 'a')
+    w = csv.writer(f)
+    w.writerow([d.date(), d.strftime('%A'),\
+                d.strftime('%H:%M'), num_people])
+
+
 if __name__ == '__main__':
     print('PureGym web scraper...')
+    init_csv()
     while True:
         num_people = fetch_activity()
-        # TODO get current date and time Tue 10 Jul 00:57:50 2018
-        # Push number of people and date and time to a csv
+        write_csv(num_people)
 
-        print(num_people)
         print('waiting {} minutes'.format(QUERY_INTERVAL))
         sleep(QUERY_INTERVAL * 60)
