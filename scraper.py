@@ -80,9 +80,6 @@ if __name__ == '__main__':
     print('PureGym web scraper...')
     init_csv()
 
-    while True:
-        num_people = fetch_activity()
-        write_csv(num_people)
+    num_people = fetch_activity()
+    write_csv(num_people)
 
-        print('waiting {} minutes'.format(QUERY_INTERVAL))
-        sleep(QUERY_INTERVAL * 60)
