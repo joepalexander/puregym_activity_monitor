@@ -35,11 +35,12 @@ options.add_argument("start-maximized")
 options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
 options.add_argument('--headless')
-# options.add_argument('window-size=800x841')
-# options.add_argument('headless')
+options.add_argument('--disable-gpu')
+options.add_argument('--no-sandbox')
+options.add_argument('--window-size=1420,1080')
 
 def fetch_activity():
-    driver = webdriver.Chrome(chrome_options=options, executable_path='/usr/local/bin/chromedriver')
+    driver = webdriver.Chrome(chrome_options=options)
     driver.get(login_url)
 
     # Log in
